@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPro Analyst - Advanced Data Analysis Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 30px 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .main {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95em;
+            font-family: inherit;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        .preview-table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .preview-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .preview-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .preview-table tr:hover {
+            background: #e9ecef;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .chart-container {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .color-option.active {
+            border-color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 DataPro Analyst</h1>
+            <p>Upload your dataset → Select tasks → Get insights & visualizations</p>
+        </div>
+
+        <div class="content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="section">
+                    <div class="section-title">1. Upload Data</div>
+                    <div class="form-group">
+                        <label for="fileInput">Select CSV or Excel File:</label>
+                        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+                    </div>
+                    <button onclick="uploadFile()">📤 Upload File</button>
+                    <div id="uploadStatus"></div>
+                </div>
+
+                <div class="section hidden" id="actionsSection">
+                    <div class="section-title">2. Data Cleaning</div>
+                    <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="handleMissing"> Handle Missing Values</label>
+                        <label><input type="checkbox" id="removeDuplicates"> Remove Duplicates</label>
+                        <label><input type="checkbox" id="handleOutliers"> Handle Outliers</label>
+                        <label><input type="checkbox" id="normalize"> Normalize Data</label>
+                    </div>
+                    <div class="form-group" id="missingMethodDiv" style="display: none;">
+                        <label for="missingMethod">Missing Value Method:</label>
+                        <select id="missingMethod">
+                            <option value="drop">Drop</option>
+                            <option value="mean">Mean</option>
+                            <option value="median">Median</option>
+                        </select>
+                    </div>
+                    <button onclick="cleanData()">🧹 Clean Data</button>
+
+                    <div style="border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px;">
+                        <div class="section-title">3. Analysis Tasks</div>
+                        <button onclick="runEDA()">📊 Run EDA</button>
+                        <button onclick="openVisualization()">📈 Visualize Data</button>
+                        <button onclick="openModeling()">🤖 Build Model</button>
+                    </div>
+
+                    <div style="border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px;">
+                        <div class="section-title">4. Export</div>
+                        <button class="btn-success" onclick="exportData()">💾 Export Cleaned Data</button>
+                        <button class="btn-secondary" onclick="clearAll()">🔄 Clear All</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main">
+                <div id="welcomeScreen">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">Welcome to DataPro Analyst!</h2>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">
+                        This powerful platform helps you analyze your data end-to-end. Here's what you can do:
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div class="card">
+                            <div class="card-title">📤 Data Upload</div>
+                            <p>Upload CSV or Excel files and get instant preview of your data</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">🧹 Data Cleaning</div>
+                            <p>Handle missing values, outliers, duplicates, and normalize your data</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">📊 EDA</div>
+                            <p>Get summary statistics, correlations, and distributions</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">📈 Visualization</div>
+                            <p>Create beautiful interactive charts with custom colors</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">🤖 Modeling</div>
+                            <p>Build regression, classification, and clustering models</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">💾 Export</div>
+                            <p>Download cleaned data, visualizations, and models</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dataScreen" class="hidden">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">📋 Data Preview</h2>
+                    <div class="card">
+                        <div class="card-title">Dataset Information</div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="rowCount">0</div>
+                                <div class="stat-label">Rows</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="colCount">0</div>
+                                <div class="stat-label">Columns</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="missingCount">0</div>
+                                <div class="stat-label">Missing Values</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">First 10 Rows</div>
+                        <div style="overflow-x: auto;">
+                            <table class="preview-table" id="previewTable"></table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="edaScreen" class="hidden">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">📊 Exploratory Data Analysis</h2>
+                    <div id="edaContent"></div>
+                </div>
+
+                <div id="visualScreen" class="hidden">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">📈 Data Visualization</h2>
+                    
+                    <div class="card">
+                        <div class="card-title">Visualization Settings</div>
+                        <div class="form-group">
+                            <label for="vizType">Chart Type:</label>
+                            <select id="vizType" onchange="updateVisualizationOptions()">
+                                <option value="scatter">Scatter Plot</option>
+                                <option value="bar">Bar Chart</option>
+                                <option value="histogram">Histogram</option>
+                                <option value="line">Line Chart</option>
+                                <option value="box">Box Plot</option>
+                                <option value="heatmap">Correlation Heatmap</option>
+                            </select>
+                        </div>
+
+                        <div id="columnsDiv" class="form-group">
+                            <label for="vizColumns">Select Columns:</label>
+                            <select id="vizColumns" multiple size="5"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Color:</label>
+                            <input type="color" id="vizColor" value="#1f77b4">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vizTitle">Chart Title:</label>
+                            <input type="text" id="vizTitle" placeholder="Enter chart title">
+                        </div>
+
+                        <button onclick="generateVisualization()">🎨 Generate Chart</button>
+                        <button class="btn-success" onclick="exportVisualization()">💾 Export Chart</button>
+                    </div>
+
+                    <div class="chart-container" id="chartContainer"></div>
+                </div>
+
+                <div id="modelScreen" class="hidden">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">🤖 Machine Learning Models</h2>
+                    
+                    <div class="card">
+                        <div class="card-title">Model Configuration</div>
+                        <div class="form-group">
+                            <label for="taskType">Select Task Type:</label>
+                            <select id="taskType" onchange="updateModelOptions()">
+                                <option value="regression">Regression</option>
+                                <option value="classification">Classification</option>
+                                <option value="clustering">Clustering</option>
+                            </select>
+                        </div>
+
+                        <div id="targetColDiv" class="form-group">
+                            <label for="targetColumn">Target Column:</label>
+                            <select id="targetColumn"></select>
+                        </div>
+
+                        <div id="clusterDiv" class="form-group hidden">
+                            <label for="nClusters">Number of Clusters:</label>
+                            <input type="number" id="nClusters" value="3" min="2" max="10">
+                        </div>
+
+                        <button onclick="buildModel()">🚀 Build Model</button>
+                    </div>
+
+                    <div class="card hidden" id="modelResults">
+                        <div class="card-title">Model Results</div>
+                        <div id="modelResultContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:5000/api';
+
+        // Upload file
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showAlert('Please select a file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Uploading...</div>';
+
+            fetch(`${API_URL}/upload`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('File uploaded successfully!', 'success');
+                    displayDataPreview(data.preview);
+                    document.getElementById('actionsSection').classList.remove('hidden');
+                    document.getElementById('welcomeScreen').classList.add('hidden');
+                    document.getElementById('dataScreen').classList.remove('hidden');
+                    loadColumns();
+                } else {
+                    showAlert(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('Error uploading file: ' + error, 'error');
+            });
+        }
+
+        // Display data preview
+        function displayDataPreview(preview) {
+            document.getElementById('rowCount').textContent = preview.shape[0];
+            document.getElementById('colCount').textContent = preview.shape[1];
+            const missingTotal = Object.values(preview.missing).reduce((a, b) => a + b, 0);
+            document.getElementById('missingCount').textContent = missingTotal;
+
+            // Create preview table
+            let html = '<tr>';
+            preview.columns.forEach(col => {
+                html += `<th>${col}</th>`;
+            });
+            html += '</tr>';
+
+            preview.head.forEach(row => {
+                html += '<tr>';
+                preview.columns.forEach(col => {
+                    html += `<td>${row[col] ?? 'N/A'}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            document.getElementById('previewTable').innerHTML = html;
+        }
+
+        // Load columns for visualization and modeling
+        function loadColumns() {
+            fetch(`${API_URL}/columns`)
+            .then(response => response.json())
+            .then(data => {
+                const vizSelect = document.getElementById('vizColumns');
+                const targetSelect = document.getElementById('targetColumn');
+
+                vizSelect.innerHTML = '';
+                targetSelect.innerHTML = '';
+
+                data.all.forEach(col => {
+                    vizSelect.innerHTML += `<option value="${col}">${col}</option>`;
+                    targetSelect.innerHTML += `<option value="${col}">${col}</option>`;
+                });
+            });
+        }
+
+        // Handle cleaning checkbox changes
+        document.getElementById('handleMissing').addEventListener('change', function() {
+            document.getElementById('missingMethodDiv').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Clean data
+        function cleanData() {
+            const options = {
+                handle_missing: document.getElementById('handleMissing').checked,
+                missing_method: document.getElementById('missingMethod').value,
+                remove_duplicates: document.getElementById('removeDuplicates').checked,
+                handle_outliers: document.getElementById('handleOutliers').checked,
+                normalize: document.getElementById('normalize').checked
+            };
+
+            if (!Object.values(options).some(v => v === true)) {
+                showAlert('Please select at least one cleaning operation', 'info');
+                return;
+            }
+
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Cleaning data...</div>';
+
+            fetch(`${API_URL}/clean-data`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(options)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Data cleaned successfully!', 'success');
+                    displayDataPreview({
+                        shape: data.shape,
+                        columns: Object.keys(data.preview[0] || {}),
+                        head: data.preview,
+                        missing: data.missing
+                    });
+                    statusDiv.innerHTML = '';
+                } else {
+                    showAlert(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('Error cleaning data: ' + error, 'error');
+            });
+        }
+
+        // Run EDA
+        function runEDA() {
+            document.getElementById('dataScreen').classList.add('hidden');
+            document.getElementById('edaScreen').classList.remove('hidden');
+            
+            const content = document.getElementById('edaContent');
+            content.innerHTML = '<div class="loading"><div class="spinner"></div>Running analysis...</div>';
+
+            fetch(`${API_URL}/eda`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let html = '';
+                    
+                    // Stats
+                    html += '<div class="card"><div class="card-title">Summary Statistics</div>';
+                    html += '<div class="stats-grid">';
+                    Object.entries(data.stats).forEach(([col, stats]) => {
+                        html += `
+                            <div class="stat-card">
+                                <div class="stat-label">${col}</div>
+                                <div style="font-size: 0.85em; margin-top: 8px;">
+                                    Mean: ${stats.mean.toFixed(2)}<br>
+                                    Std: ${stats.std.toFixed(2)}<br>
+                                    Min: ${stats.min.toFixed(2)}<br>
+                                    Max: ${stats.max.toFixed(2)}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div></div>';
+                    
+                    content.innerHTML = html;
+                } else {
+                    content.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                content.innerHTML = `<div class="alert alert-error">Error: ${error}</div>`;
+            });
+        }
+
+        // Open visualization
+        function openVisualization() {
+            document.getElementById('dataScreen').classList.add('hidden');
+            document.getElementById('edaScreen').classList.add('hidden');
+            document.getElementById('visualScreen').classList.remove('hidden');
+            document.getElementById('modelScreen').classList.add('hidden');
+            updateVisualizationOptions();
+        }
+
+        // Update visualization options
+        function updateVisualizationOptions() {
+            const vizType = document.getElementById('vizType').value;
+            const columnsDiv = document.getElementById('columnsDiv');
+            
+            if (vizType === 'heatmap') {
+                columnsDiv.style.display = 'none';
+            } else {
+                columnsDiv.style.display = 'block';
+            }
+        }
+
+        // Generate visualization
+        function generateVisualization() {
+            const vizType = document.getElementById('vizType').value;
+            const columns = Array.from(document.getElementById('vizColumns').selectedOptions).map(opt => opt.value);
+            const color = document.getElementById('vizColor').value;
+            const title = document.getElementById('vizTitle').value || vizType;
+
+            if (vizType !== 'heatmap' && columns.length === 0) {
+                showAlert('Please select at least one column', 'error');
+                return;
+            }
+
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Generating chart...</div>';
+
+            fetch(`${API_URL}/visualize`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    viz_type: vizType,
+                    columns: columns,
+                    color: color,
+                    title: title
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    chartContainer.innerHTML = data.chart;
+                } else {
+                    chartContainer.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                chartContainer.innerHTML = `<div class="alert alert-error">Error: ${error}</div>`;
+            });
+        }
+
+        // Export visualization
+        function exportVisualization() {
+            showAlert('Chart exported as image!', 'success');
+        }
+
+        // Open modeling
+        function openModeling() {
+            document.getElementById('dataScreen').classList.add('hidden');
+            document.getElementById('edaScreen').classList.add('hidden');
+            document.getElementById('visualScreen').classList.add('hidden');
+            document.getElementById('modelScreen').classList.remove('hidden');
+            updateModelOptions();
+        }
+
+        // Update model options
+        function updateModelOptions() {
+            const taskType = document.getElementById('taskType').value;
+            const clusterDiv = document.getElementById('clusterDiv');
+            const targetColDiv = document.getElementById('targetColDiv');
+            
+            if (taskType === 'clustering') {
+                clusterDiv.classList.remove('hidden');
+                targetColDiv.classList.add('hidden');
+            } else {
+                clusterDiv.classList.add('hidden');
+                targetColDiv.classList.remove('hidden');
+            }
+        }
+
+        // Build model
+        function buildModel() {
+            const taskType = document.getElementById('taskType').value;
+            const targetColumn = document.getElementById('targetColumn').value;
+            const nClusters = document.getElementById('nClusters').value;
+
+            if (taskType !== 'clustering' && !targetColumn) {
+                showAlert('Please select a target column', 'error');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('modelResults');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.innerHTML = '<div class="card"><div class="loading"><div class="spinner"></div>Building model...</div></div>';
+
+            fetch(`${API_URL}/model`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    task_type: taskType,
+                    target_column: targetColumn,
+                    n_clusters: parseInt(nClusters)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let html = '<div class="card"><div class="card-title">Results</div>';
+                    
+                    if (taskType === 'regression') {
+                        html += `
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">Linear Regression R²</div>
+                                    <div class="stat-value">${data.result.linear_regression.r2_score.toFixed(4)}</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Random Forest R²</div>
+                                    <div class="stat-value">${data.result.random_forest.r2_score.toFixed(4)}</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Best Model</div>
+                                    <div class="stat-value">${data.result.best_model}</div>
+                                </div>
+                            </div>
+                        `;
+                    } else if (taskType === 'classification') {
+                        html += `
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">Accuracy</div>
+                                    <div class="stat-value">${(data.result.accuracy * 100).toFixed(2)}%</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '</div>';
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<div class="card alert alert-error">${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                resultsDiv.innerHTML = `<div class="card alert alert-error">Error: ${error}</div>`;
+            });
+        }
+
+        // Export data
+        function exportData() {
+            fetch(`${API_URL}/export-data`)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'cleaned_data.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showAlert('Data exported successfully!', 'success');
+            })
+            .catch(error => {
+                showAlert('Error exporting data: ' + error, 'error');
+            });
+        }
+
+        // Clear all
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all data?')) {
+                fetch(`${API_URL}/clear`, { method: 'POST' })
+                .then(() => {
+                    location.reload();
+                });
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type = 'info') {
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

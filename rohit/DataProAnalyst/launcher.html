@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPro Analyst - Launcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .launcher-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 16px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .info-box {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: left;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status.checking {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.running {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .features {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .features h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .features ul {
+            list-style: none;
+            columns: 2;
+            gap: 20px;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .launcher-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .features ul {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="launcher-container">
+        <div class="logo">🔥</div>
+        <h1>DataPro Analyst</h1>
+        <p class="subtitle">Your Advanced Data Analysis Platform</p>
+
+        <div id="statusDiv"></div>
+
+        <div class="features">
+            <h3>Available Features</h3>
+            <ul>
+                <li>Upload CSV/Excel files</li>
+                <li>Data Cleaning & Preprocessing</li>
+                <li>Exploratory Data Analysis</li>
+                <li>Interactive Visualizations</li>
+                <li>Machine Learning Models</li>
+                <li>Export Results</li>
+            </ul>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="startApp()">🚀 Start Application</button>
+            <button class="btn-secondary" onclick="openServerGuide()">📖 Setup Instructions</button>
+        </div>
+
+        <div class="info-box">
+            <h3>ℹ️ How to Use</h3>
+            <p><strong>First Time Setup:</strong></p>
+            <p>1. Run <code>run.bat</code> file to start the server</p>
+            <p>2. Click "Start Application" button below</p>
+            <p>3. Or manually open: <code>http://localhost:5000</code></p>
+            <p><strong>Note:</strong> The server must be running for the app to work</p>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'checking') {
+            const statusDiv = document.getElementById('statusDiv');
+            statusDiv.innerHTML = `
+                <div class="status ${type}">
+                    ${type === 'checking' ? '<div class="spinner"></div>' : ''}
+                    ${message}
+                </div>
+            `;
+        }
+
+        function checkServer() {
+            return fetch('http://localhost:5000/')
+                .then(() => true)
+                .catch(() => false);
+        }
+
+        function startApp() {
+            updateStatus('Checking if server is running...', 'checking');
+
+            setTimeout(async () => {
+                const isRunning = await checkServer();
+
+                if (isRunning) {
+                    updateStatus('✅ Server is running! Opening app...', 'running');
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:5000';
+                    }, 1000);
+                } else {
+                    updateStatus('❌ Server is not running. Please run run.bat first', 'error');
+                }
+            }, 1000);
+        }
+
+        function openServerGuide() {
+            const guide = `
+DataPro Analyst - Setup Guide
+=============================
+
+REQUIREMENTS:
+- Python 3.8 or higher
+- Windows, Mac, or Linux
+
+INSTALLATION STEPS:
+
+1. Navigate to the DataProAnalyst folder
+2. Run the 'run.bat' file (Windows) or execute:
+   python -m pip install -r requirements.txt
+   python app.py
+
+3. The server will start on http://localhost:5000
+
+4. Click "Start Application" to open the web app
+
+FEATURES:
+✓ Upload CSV/Excel files
+✓ Data cleaning (missing values, outliers)
+✓ Exploratory Data Analysis
+✓ Interactive charts & visualizations
+✓ Machine Learning models (Regression, Classification, Clustering)
+✓ Export cleaned data and visualizations
+✓ Color customization for charts
+
+TROUBLESHOOTING:
+- If port 5000 is busy, modify the port in app.py
+- Make sure all Python packages are installed
+- Check firewall settings if having connectivity issues
+
+For support, check the README.md file
+            `;
+
+            alert(guide);
+        }
+
+        // Check server status on page load
+        window.addEventListener('load', async () => {
+            const isRunning = await checkServer();
+            if (isRunning) {
+                updateStatus('✅ Server is ready! Click "Start Application" to begin', 'running');
+            } else {
+                updateStatus('⚠️ Server is not running. Please run run.bat first', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
